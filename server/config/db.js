@@ -8,6 +8,7 @@ const DB_USER = process.env.DB_USER || 'postgres';
 const DB_PASSWORD = process.env.DB_PASSWORD || 'postgres';
 const DB_HOST = process.env.DB_HOST || 'localhost';
 const DB_PORT = process.env.DB_PORT || 5432;
+const isProduction = process.env.NODE_ENV === 'production';
 
 // Auto-create database if it doesn't exist
 const ensureDatabase = async () => {
@@ -16,7 +17,8 @@ const ensureDatabase = async () => {
         password: DB_PASSWORD,
         host: DB_HOST,
         port: DB_PORT,
-        database: 'postgres' // connect to default 'postgres' db first
+        database: 'postgres',
+        ssl: isProduction ? { rejectUnauthorized: false } : false
     });
 
     try {
@@ -46,7 +48,7 @@ const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
         idle: 10000
     },
     dialectOptions: {
-        ssl: false
+        ssl: isProduction ? { require: true, rejectUnauthorized: false } : false
     }
 });
 
@@ -58,7 +60,6 @@ const connectDB = async () => {
         console.log('✅ PostgreSQL connected successfully');
     } catch (error) {
         console.error('❌ PostgreSQL connection failed:', error.message);
-        // Continue without DB for demo purposes
     }
 };
 
