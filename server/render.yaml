@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: skillswap-api
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        value: 5432
+      - key: DB_NAME
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: REDIS_URL
+        sync: false
+      - key: PYTHON_SERVICE_URL
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
